@@ -1,23 +1,21 @@
 terraform {
   required_providers {
-    docker = {
-      source = "kreuzwerker/docker"
+    google = {
+      source = "hashicorp/google"
+      version = "3.5.0"
     }
   }
 }
 
-provider "docker" {}
+provider "google" {
 
-resource "docker_image" "nginx" {
-  name         = "nginx:latest"
-  keep_locally = false
+  credentials = file("key.json")
+
+  project = "9000"
+  region  = "asia-northeast1"
+  zone    = "asia-northeast1-a"
 }
 
-resource "docker_container" "nginx" {
-  image = docker_image.nginx.latest
-  name  = "tutorial"
-  ports {
-    internal = 80
-    external = 8000
-  }
+resource "google_compute_network" "vpc_network" {
+  name = "terraform-network"
 }
